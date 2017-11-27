@@ -7,13 +7,17 @@ import seaborn as sns
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score as auc
+from sklearn.metrics import accuracy_score
+
+from xgboost import XGBClassifier
 
 from clean_data import *
+
 
 df = pd.read_csv('./data/train.csv')
 
 # CLEAN DATA
-print("Cleaning data...")
+print("Cleaning data...\n")
 df = remove_constant_columns(df)
 df = remove_duplicate_columns(df)
 
@@ -25,15 +29,26 @@ X_test = test_df.drop(['ID', 'TARGET'], axis=1)
 y_train = train_df['TARGET']
 y_test = test_df['TARGET']
 
+# GradientBoostingClassifier
 print("Classifying using GradientBoostingClassifier...")
 gb_classifier = GradientBoostingClassifier(random_state=1)
 
 gb_classifier.fit(X_train, y_train)
-score = gb_classifier.score(X_test, y_test)
+gb_predictions = gb_classifier.predict(X_test)
 
-print("Score from classifier: %s" % score)
+print("Computing scores...")
+gb_accuracy_score = accuracy_score(y_test, gb_predictions)
+gb_auc_score = auc(y_test, gb_predictions)
+print("Accuracy score: %s - AUC score: %s\n" % (gb_accuracy_score, gb_auc_score))
 
-print("Computing AUC...")
-auc_score = auc(y_test, gb_classifier.predict(X_test))
+# XGBClassifier
+print("Classifying using XGBClassifier...")
+xgb_classifier = XGBClassifier()
 
-print("AUC score: %s" % auc_score)
+xgb_classifier.fit(X_train, y_train)
+xgb_predictions = xgb_classifier.predict(X_test)
+
+print("Computing scores...")
+xgb_accuracy_score = accuracy_score(y_test, xgb_predictions)
+xgb_auc_score = auc(y_test, xgb_predictions)
+print("Accuracy score: %s - AUC score: %s\n" % (xgb_accuracy_score, xgb_auc_score))
