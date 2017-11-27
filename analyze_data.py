@@ -21,6 +21,10 @@ print("Cleaning data...\n")
 df = remove_constant_columns(df)
 df = remove_duplicate_columns(df)
 
+values_df = pd.DataFrame(df['TARGET'].value_counts())
+values_df['Percentage'] = 100 * values_df['TARGET'] / df.shape[0]
+print(values_df)
+
 train_df, test_df = train_test_split(df, test_size=0.2)
 
 X_train = train_df.drop(['ID', 'TARGET'], axis=1)
@@ -30,7 +34,7 @@ y_train = train_df['TARGET']
 y_test = test_df['TARGET']
 
 # GradientBoostingClassifier
-print("Classifying using GradientBoostingClassifier...")
+print("\nClassifying using GradientBoostingClassifier...")
 gb_classifier = GradientBoostingClassifier(random_state=1)
 
 gb_classifier.fit(X_train, y_train)
