@@ -3,12 +3,16 @@ import pandas as pd
 
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import ExtraTreesClassifier
+from sklearn.ensemble import AdaBoostClassifier
 from xgboost import XGBClassifier
 
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import roc_auc_score
-from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.feature_selection import SelectFromModel
+
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import cross_val_score
+
+from sklearn.metrics import roc_auc_score
 
 from time import time
 
@@ -93,6 +97,17 @@ rf_predictions = rf_classifier.predict_proba(X_test)[:, 1]
 rf_auc_score = roc_auc_score(y_test, rf_predictions)
 
 scores['RandomForestClassifier'] = (rf_auc_score, time() - start_time_rf)
+
+# AdaBoost
+start_time_ab = time()
+ab_classifier = AdaBoostClassifier(n_estimators=100, random_state=1)
+
+ab_classifier.fit(X_train, y_train)
+ab_predictions = ab_classifier.predict_proba(X_test)[:, 1]
+
+ab_auc_score = roc_auc_score(y_test, ab_predictions)
+
+scores['AdaBoost'] = (ab_auc_score, time() - start_time_ab)
 
 # XGBClassifier
 start_time_xgb = time()
