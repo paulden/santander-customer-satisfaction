@@ -10,7 +10,6 @@ from xgboost import XGBClassifier
 from sklearn.feature_selection import SelectFromModel
 
 from sklearn.model_selection import train_test_split
-from sklearn.model_selection import cross_val_score
 
 from sklearn.metrics import roc_auc_score
 
