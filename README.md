@@ -16,8 +16,8 @@ TARGET | Count | Percentage
 
 Five most important features according to ExtraTreesClassifier
 
-           label       | importance |      std
------------------------|------------|---------
+label | importance | std
+---|---|---
 var38                  |   0.399273 | 0.016223
 var15                  |   0.163030 | 0.016247
 saldo_medio_var5_hace3 |   0.025653 | 0.001300
